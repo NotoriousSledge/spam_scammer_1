@@ -1,22 +1,14 @@
 import { faker } from '@faker-js/faker';
 import { CardInformation } from './post.ts';
+// @ts-ignore
+import { GenCC } from 'creditcard-generator';
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function getCardNumber() {
-  // Visa starts with 4, MasterCard with 5
-  const first = Math.random() > 0.5 ? '4' : '5';
-
-  // Get the card number
-  const number = getRandomInt(
-    Number(`${first}000000000000000`),
-    Number(`${first}999999999999999`)
-  );
-
-  // Split it into groups of 4 digits
-  return String(number).replace(/^(.{4})(.{4})(.{4})(.*)$/, '$1 $2 $3 $4');
+  return GenCC(Math.random() > 0.5 ? 'VISA' : 'MASTERCARD', 1)[0];
 }
 
 function getExpiryDate() {
@@ -24,7 +16,7 @@ function getExpiryDate() {
 }
 
 function getCvv() {
-  return getRandomInt(100, 999);
+  return String(getRandomInt(100, 999));
 }
 
 export function generateCardInformation(): CardInformation {

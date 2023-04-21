@@ -7,7 +7,7 @@ export type CardInformation = {
   last_name: string;
   card_number: string;
   expiration_date: string;
-  cvv: number;
+  cvv: string;
 };
 
 export async function postCardInformation(card: CardInformation) {
@@ -21,11 +21,7 @@ export async function postCardInformation(card: CardInformation) {
   formData.append('two', card.expiration_date);
   formData.append('three', card.cvv);
 
-  try {
-    const result = await axios.post(POST_URL, formData);
-    console.log(result.headers);
-    // if (result.headers) throw new Error('Invalid card information');
-  } catch (e) {
-    console.error(e);
-  }
+  const result = await axios.post(POST_URL, formData);
+  if (String(result.request.path).endsWith('error'))
+    throw new Error('Invalid card information');
 }
